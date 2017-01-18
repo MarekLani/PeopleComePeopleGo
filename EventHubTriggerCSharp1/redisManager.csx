@@ -1,5 +1,6 @@
 using StackExchange.Redis;
 using System.Text;
+using System.Configuration;
 
 private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
 {
