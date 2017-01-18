@@ -26,6 +26,6 @@ static string insertKeyValuePair()
 
     //cache.StringGet();
     //cache.KeyDelete();
-    string ret = created ? value : cache.StringGet("key").ToString();
+    string ret = cache.StringGet("key").ToString();
     return (ret);
 }
