@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "myEventHubMessage",
+      "direction": "in",
+      "path": "bluedynamicshub",
+      "connection": "BlueDynamic"
+    }
+  ],
+  "disabled": false
+}
