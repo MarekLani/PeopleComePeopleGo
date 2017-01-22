@@ -333,6 +333,7 @@ public static class EmotionServiceHelper
             catch (ClientException exception) when (exception.HttpStatus == (System.Net.HttpStatusCode)429 && retriesLeft > 0)
             {
                 log.Info("Emotion API throttling error " + exception.Message.ToString());
+
                 if (retriesLeft == 1 && Throttled != null)
                 {
                     Throttled();
