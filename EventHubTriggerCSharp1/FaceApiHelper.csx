@@ -21,6 +21,8 @@ public class FaceServiceHelper
 {
     public static Dictionary<string, FaceListInfo> faceLists;
 
+    public static TraceWriter log;
+
     internal class FaceListInfo
     {
         public string FaceListId { get; set; }
@@ -28,7 +30,7 @@ public class FaceServiceHelper
         public bool IsFull { get; set; }
     }
 
-    public static void InitializeFaceLists()
+    public static async void InitializeFaceLists()
     {
         try
         {
@@ -40,11 +42,11 @@ public class FaceServiceHelper
         }
         catch (Exception e)
         {
-            ErrorTrackingHelper.TrackException(e, "Face API GetFaceListsAsync error");
+            log.Info("Face API GetFaceListsAsync error: " + e.Message.ToString);
         }
     }
 
-    public static Tuple<SimilarPersistedFace, string> FindBestMatch(Guid faceId)
+    public static Task<Tuple<SimilarPersistedFace, string>> FindBestMatch(Guid faceId)
     {
         Tuple<SimilarPersistedFace, string> bestMatch = null;
         bool foundMatch = false;
@@ -77,7 +79,7 @@ public class FaceServiceHelper
             {
                 // Catch errors with individual face lists so we can continue looping through all lists. Maybe an answer will come from
                 // another one.
-                ErrorTrackingHelper.TrackException(e, "Face API FindSimilarAsync error");
+                log.Info("Face API FindSimilarAsync error " + e.Message.ToString);
             }
         }
         return bestMatch;
@@ -283,6 +285,8 @@ public static class EmotionServiceHelper
     public static int RetryCountOnQuotaLimitError = 6;
     public static int RetryDelayOnQuotaLimitError = 500;
 
+    public static TraceWriter log;
+
     private static EmotionServiceClient emotionClient { get; set; }
 
     static EmotionServiceHelper()
@@ -328,7 +332,7 @@ public static class EmotionServiceHelper
             }
             catch (ClientException exception) when (exception.HttpStatus == (System.Net.HttpStatusCode)429 && retriesLeft > 0)
             {
-                ErrorTrackingHelper.TrackException(exception, "Emotion API throttling error");
+                log.Info("Emotion API throttling error " + e.Message.ToString);
                 if (retriesLeft == 1 && Throttled != null)
                 {
                     Throttled();
@@ -349,7 +353,7 @@ public static class EmotionServiceHelper
         await RunTaskWithAutoRetryOnQuotaLimitExceededError<object>(async () => { await action(); return null; });
     }
 
-    public static async Task<Emotion[]> RecognizeWithFaceRectanglesAsync(string imageUrl, Rectangle[] faceRectangles)
+    public static async Task<Emotion[]> RecognizeWithFaceRectanglesAsync(string imageUrl, System.Drawing.Rectangle[] faceRectangles)
     {
         return await RunTaskWithAutoRetryOnQuotaLimitExceededError<Emotion[]>(() => emotionClient.RecognizeAsync(imageUrl, faceRectangles));
     }

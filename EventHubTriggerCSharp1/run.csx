@@ -18,6 +18,10 @@ using System.Drawing;
 public static async void Run(string myEventHubMessage, TraceWriter log)
 {
     log.Info($"C# Event Hub trigger function processing a message: {myEventHubMessage}");
+
+    FaceServiceHelper.log = log;
+    EmotionServiceHelper.log = log;
+
     var fd = JsonConvert.DeserializeObject<FaceData>(myEventHubMessage);
     FaceServiceHelper.ApiKey = ConfigurationManager.AppSettings["FaceApiKey"].ToString();
 
