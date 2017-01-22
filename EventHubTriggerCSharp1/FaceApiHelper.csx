@@ -30,7 +30,7 @@ public class FaceServiceHelper
         public bool IsFull { get; set; }
     }
 
-    public static async void InitializeFaceLists()
+    public static async Task InitializeFaceLists()
     {
         faceLists = new Dictionary<string, FaceListInfo>();
         try
