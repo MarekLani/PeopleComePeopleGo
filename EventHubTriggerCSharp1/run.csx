@@ -26,7 +26,9 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
     string imageUrl = ConfigurationManager.AppSettings["StorageURL"].ToString() +"/"+ ConfigurationManager.AppSettings["StorageContainer"].ToString() + "/" + fd.deviceId + "/" + fd.blobName;
     log.Info(imageUrl);
 
-    Face f = await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose }).First();
+    Face f = (await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose })).ToList()?.FirstOrDefault();
+    if (f == null)
+        return;
 
     //person is entering premises
     if (fd.entryCamera)
@@ -35,7 +37,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
         if (similarFace == null)
         {
             // Detect emotion if not already in face list and send to event hub
-            var emotion = EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new Rectangle[] { new Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } });
+            var emotion = EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new System.Drawing.Rectangle[] { new System.Drawing.Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } });
             //Solve creation of face lists
             var persistedFace = await FaceServiceHelper.AddPersonToListAndCreateListIfNeeded("faceListId", imageUrl, Face.FaceRectangle);
             //We need to send just similarPersistedFaceID (it is GUID)
