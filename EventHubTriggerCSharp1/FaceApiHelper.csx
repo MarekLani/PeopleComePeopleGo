@@ -46,7 +46,7 @@ public class FaceServiceHelper
         }
     }
 
-    public static Task<Tuple<SimilarPersistedFace, string>> FindBestMatch(Guid faceId)
+    public static async Task<Tuple<SimilarPersistedFace, string>> FindBestMatch(Guid faceId)
     {
         Tuple<SimilarPersistedFace, string> bestMatch = null;
         bool foundMatch = false;
