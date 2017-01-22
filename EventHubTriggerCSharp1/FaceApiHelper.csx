@@ -42,7 +42,7 @@ public class FaceServiceHelper
         }
         catch (Exception e)
         {
-            log.Info("Face API GetFaceListsAsync error: " + e.Message.ToString);
+            log.Info("Face API GetFaceListsAsync error: " + e.Message.ToString());
         }
     }
 
@@ -79,13 +79,13 @@ public class FaceServiceHelper
             {
                 // Catch errors with individual face lists so we can continue looping through all lists. Maybe an answer will come from
                 // another one.
-                log.Info("Face API FindSimilarAsync error " + e.Message.ToString);
+                log.Info("Face API FindSimilarAsync error " + e.Message.ToString());
             }
         }
         return bestMatch;
     }
 
-    public static SimilarPersistedFace AddPersonToListAndCreateListIfNeeded(string imageUri, FaceRectangle faceRectangle)
+    public static async Task<SimilarPersistedFace> AddPersonToListAndCreateListIfNeeded(string imageUri, FaceRectangle faceRectangle)
     {
 
         // If we are here we didnt' find a match, so let's add the face to the first FaceList that we can add it to. We
@@ -96,7 +96,7 @@ public class FaceServiceHelper
         {
             // We don't have any FaceLists yet. Create one
             string newFaceListId = Guid.NewGuid().ToString();
-            await FaceServiceHelper.CreateFaceListAsync(newFaceListId, "ManagedFaceList", FaceListsUserDataFilter);
+            await FaceServiceHelper.CreateFaceListAsync(newFaceListId, "ManagedFaceList");
 
             faceLists.Add(newFaceListId, new FaceListInfo { FaceListId = newFaceListId, LastMatchTimestamp = DateTime.Now });
         }
@@ -332,7 +332,7 @@ public static class EmotionServiceHelper
             }
             catch (ClientException exception) when (exception.HttpStatus == (System.Net.HttpStatusCode)429 && retriesLeft > 0)
             {
-                log.Info("Emotion API throttling error " + e.Message.ToString);
+                log.Info("Emotion API throttling error " + exception.Message.ToString);
                 if (retriesLeft == 1 && Throttled != null)
                 {
                     Throttled();

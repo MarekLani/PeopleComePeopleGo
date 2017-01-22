@@ -43,7 +43,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
             // Detect emotion if not already in face list and send to event hub
             var emotion = EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new Rectangle[] { new Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } });
             //Solve creation of face lists
-            var persistedFace = await FaceServiceHelper.AddPersonToListAndCreateListIfNeeded("faceListId", imageUrl, f.FaceRectangle);
+            var persistedFace = await FaceServiceHelper.AddPersonToListAndCreateListIfNeeded(imageUrl, f.FaceRectangle);
             //We need to send just similarPersistedFaceID (it is GUID)
             //Todo send to EventHub event: entering, persistedFace.SimilarPersistedFaceId as FaceID, emotion, face landmakrs (age, mustache, glasses)...
         }
