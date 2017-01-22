@@ -13,7 +13,7 @@ using Microsoft.ProjectOxford.Emotion;
 using Microsoft.ProjectOxford.Emotion.Contract;
 using Newtonsoft.Json;
 using System.Configuration;
-using System.Drawing;
+using Microsoft.ProjectOxford.Common;
 
 public static async void Run(string myEventHubMessage, TraceWriter log)
 {
@@ -41,9 +41,9 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
         if (similarFace == null)
         {
             // Detect emotion if not already in face list and send to event hub
-            var emotion = EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new System.Drawing.Rectangle[] { new System.Drawing.Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } });
+            var emotion = EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new Rectangle[] { new Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } });
             //Solve creation of face lists
-            var persistedFace = await FaceServiceHelper.AddPersonToListAndCreateListIfNeeded("faceListId", imageUrl, Face.FaceRectangle);
+            var persistedFace = await FaceServiceHelper.AddPersonToListAndCreateListIfNeeded("faceListId", imageUrl, f.FaceRectangle);
             //We need to send just similarPersistedFaceID (it is GUID)
             //Todo send to EventHub event: entering, persistedFace.SimilarPersistedFaceId as FaceID, emotion, face landmakrs (age, mustache, glasses)...
         }

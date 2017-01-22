@@ -198,8 +198,8 @@ public class FaceServiceHelper
 
     private static async Task<TResponse> RunTaskWithAutoRetryOnQuotaLimitExceededError<TResponse>(Func<Task<TResponse>> action)
     {
-        int retriesLeft = FaceAPIHelper.RetryCountOnQuotaLimitError;
-        int delay = FaceAPIHelper.RetryDelayOnQuotaLimitError;
+        int retriesLeft = FaceServiceHelper.RetryCountOnQuotaLimitError;
+        int delay = FaceServiceHelper.RetryDelayOnQuotaLimitError;
 
         TResponse response = default(TResponse);
 
