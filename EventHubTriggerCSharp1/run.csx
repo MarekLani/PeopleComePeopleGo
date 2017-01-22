@@ -35,7 +35,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
     {
 
         log.Info("*******************************");
-        log.Info("Face" + " :" + f.FaceAttributes.Age);
+        log.Info("Face" + "  :" + fd.entryCamera.ToString() + f.FaceAttributes.Age);
         //person is entering premises
         if (fd.entryCamera)
         {
