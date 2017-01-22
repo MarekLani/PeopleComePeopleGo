@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Drawing;
+using Microsoft.ProjectOxford.Common;
 
 public class FaceData
 {
@@ -353,7 +353,7 @@ public static class EmotionServiceHelper
         await RunTaskWithAutoRetryOnQuotaLimitExceededError<object>(async () => { await action(); return null; });
     }
 
-    public static async Task<Emotion[]> RecognizeWithFaceRectanglesAsync(string imageUrl, System.Drawing.Rectangle[] faceRectangles)
+    public static async Task<Emotion[]> RecognizeWithFaceRectanglesAsync(string imageUrl, Rectangle[] faceRectangles)
     {
         return await RunTaskWithAutoRetryOnQuotaLimitExceededError<Emotion[]>(() => emotionClient.RecognizeAsync(imageUrl, faceRectangles));
     }
