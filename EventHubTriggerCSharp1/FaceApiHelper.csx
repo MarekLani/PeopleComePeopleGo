@@ -112,7 +112,7 @@ public class FaceServiceHelper
 
             try
             {
-                addResult = await FaceServiceHelper.AddFaceToFaceListAsync(faceList.Key, faceRectangle);
+                addResult = await FaceServiceHelper.AddFaceToFaceListAsync(faceList.Key, imageUri, faceRectangle);
                 break;
             }
             catch (Exception ex)
@@ -148,7 +148,7 @@ public class FaceServiceHelper
 
             // create new list
             string newFaceListId = Guid.NewGuid().ToString();
-            await CreateFaceListAsync(newFaceListId, "ManagedFaceList", FaceListsUserDataFilter);
+            await CreateFaceListAsync(newFaceListId, "ManagedFaceList");
             faceLists.Add(newFaceListId, new FaceListInfo { FaceListId = newFaceListId, LastMatchTimestamp = DateTime.Now });
 
             // Add face to new list
@@ -332,7 +332,7 @@ public static class EmotionServiceHelper
             }
             catch (ClientException exception) when (exception.HttpStatus == (System.Net.HttpStatusCode)429 && retriesLeft > 0)
             {
-                log.Info("Emotion API throttling error " + exception.Message.ToString);
+                log.Info("Emotion API throttling error " + exception.Message.ToString());
                 if (retriesLeft == 1 && Throttled != null)
                 {
                     Throttled();
