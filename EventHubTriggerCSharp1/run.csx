@@ -33,7 +33,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
     Face f = (await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose })).ToList()?.FirstOrDefault();
     if (f == null)
         return;
-
+    log.Info("*******************************");
     log.Info("Face" + " :" + f.FaceAttributes.Age );
     //person is entering premises
     if (fd.entryCamera)
