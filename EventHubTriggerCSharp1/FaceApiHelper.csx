@@ -20,6 +20,13 @@ public class FaceServiceHelper
 {
     public static Dictionary<string, FaceListInfo> faceLists;
 
+    internal class FaceListInfo
+    {
+        public string FaceListId { get; set; }
+        public DateTime LastMatchTimestamp { get; set; }
+        public bool IsFull { get; set; }
+    }
+
     public static void InitializeFaceLists()
     {
         try
@@ -154,7 +161,7 @@ public class FaceServiceHelper
     }
 
 
-    private static FaceAttributeType[] DefaultFaceAttributeTypes = new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose };
+    private static readonly FaceAttributeType[] DefaultFaceAttributeTypes = new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose };
     public static int RetryCountOnQuotaLimitError = 6;
     public static int RetryDelayOnQuotaLimitError = 500;
 
