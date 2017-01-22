@@ -13,6 +13,7 @@ using Microsoft.ProjectOxford.Emotion;
 using Microsoft.ProjectOxford.Emotion.Contract;
 using Newtonsoft.Json;
 using System.Configuration;
+using System.Drawing;
 
 public static async void Run(string myEventHubMessage, TraceWriter log)
 {
@@ -25,7 +26,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
     string imageUrl = ConfigurationManager.AppSettings["StorageURL"].ToString() +"/"+ ConfigurationManager.AppSettings["StorageContainer"].ToString() + "/" + fd.deviceId + "/" + fd.blobName;
     log.Info(imageUrl);
 
-    Face f = await FaceApiHelper.DetectAsync(imageUrl, true, true).First();
+    Face f = await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose }).First();
 
     //person is entering premises
     if (fd.entryCamera)
