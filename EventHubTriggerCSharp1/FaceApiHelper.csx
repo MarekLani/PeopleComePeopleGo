@@ -32,6 +32,7 @@ public class FaceServiceHelper
 
     public static async void InitializeFaceLists()
     {
+        faceLists = new Dictionary<string, FaceListInfo>();
         try
         {
             IEnumerable<FaceListMetadata> metadata = await GetFaceListsAsync();
@@ -47,7 +48,13 @@ public class FaceServiceHelper
     }
 
     public static async Task<Tuple<SimilarPersistedFace, string>> FindBestMatch(Guid faceId)
-    {
+    { faceLists = new Dictionary<string, FaceListInfo>();
+
+        if (faceLists == null)
+        {
+            await InitializeFaceLists();
+        }
+
         Tuple<SimilarPersistedFace, string> bestMatch = null;
         bool foundMatch = false;
         foreach (var faceListId in faceLists.Keys)
