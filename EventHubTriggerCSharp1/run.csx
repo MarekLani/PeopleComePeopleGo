@@ -61,7 +61,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
                 }
                 else
                 {
-                    log.Info("Similar Face" + similarFace.Item1);
+                    log.Info("Similar Face");
 
                 }
             }
