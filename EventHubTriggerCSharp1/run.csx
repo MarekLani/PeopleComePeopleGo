@@ -33,11 +33,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
     try
     {
         Face f = (await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose })).ToList()?.FirstOrDefault();
-    }
-    catch(Exception e)
-    {
-        log.Info(e.Message);
-    }
+    
     if (f != null)
     {
 
@@ -77,6 +73,11 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
             }
         }
         //var r = insertKeyValuePair();
+    }
+    }
+    catch (Exception e)
+    {
+        log.Info(e.Message);
     }
 
     StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["ContainerName"].ToString());
