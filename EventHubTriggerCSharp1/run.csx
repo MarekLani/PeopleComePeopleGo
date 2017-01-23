@@ -43,22 +43,28 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
 
             log.Info("*******************************");
             log.Info("Face" + "  :" + fd.entryCamera.ToString() + f.FaceAttributes.Age);
-            //    //person is entering premises
-            //    if (fd.entryCamera)
-            //    {
-            //        log.Info("Entry Camera");
-            //        var similarFace = await FaceServiceHelper.FindBestMatch(f.FaceId);
-            //        if (similarFace == null)
-            //        {
-            //            log.Info("No Similar Face");
-            //            // Detect emotion if not already in face list and send to event hub
-            //            var emotion = EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new Rectangle[] { new Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } });
-            //            //Solve creation of face lists
-            //            var persistedFace = await FaceServiceHelper.AddPersonToListAndCreateListIfNeeded(imageUrl, f.FaceRectangle);
-            //            //We need to send just similarPersistedFaceID (it is GUID)
-            //            //Todo send to EventHub event: entering, persistedFace.SimilarPersistedFaceId as FaceID, emotion, face landmakrs (age, mustache, glasses)...
-            //        }
-            //    }
+            //person is entering premises
+            if (fd.entryCamera)
+            {
+                log.Info("Entry Camera");
+                var similarFace = await FaceServiceHelper.FindBestMatch(f.FaceId);
+                if (similarFace == null)
+                {
+                    log.Info("No Similar Face");
+                    // Detect emotion if not already in face list and send to event hub
+                    var emotion = EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new Rectangle[] { new Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } });
+                    log.Info(emotion.Scores.Neutral.ToString());
+                    //Solve creation of face lists
+                    var persistedFace = await FaceServiceHelper.AddPersonToListAndCreateListIfNeeded(imageUrl, f.FaceRectangle);
+                    //We need to send just similarPersistedFaceID (it is GUID)
+                    //Todo send to EventHub event: entering, persistedFace.SimilarPersistedFaceId as FaceID, emotion, face landmakrs (age, mustache, glasses)...
+                }
+                else
+                {
+                    log.Info("Similar Face" + similarFace.PersistedFaceId.ToString());
+
+                }
+            }
             //    //Person is leaving premises
             //    else
             //    {
