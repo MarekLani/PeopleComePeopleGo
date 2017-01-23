@@ -54,6 +54,7 @@ public class FaceServiceHelper
         {
             await InitializeFaceLists();
         }
+        log.Info("facelist number" + faceLists.Count().ToString());
 
         Tuple<SimilarPersistedFace, string> bestMatch = null;
         bool foundMatch = false;
