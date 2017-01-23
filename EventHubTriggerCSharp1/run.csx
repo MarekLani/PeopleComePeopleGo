@@ -23,12 +23,13 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
     EmotionServiceHelper.log = log;
 
     var fd = JsonConvert.DeserializeObject<FaceData>(myEventHubMessage);
-    FaceServiceHelper.ApiKey = ConfigurationManager.AppSettings["FaceApiKey"].ToString();
+    log.Info(fd.ToString());
+    //FaceServiceHelper.ApiKey = ConfigurationManager.AppSettings["FaceApiKey"].ToString();
 
     ////TODO create emotion api and add setting
-    EmotionServiceHelper.ApiKey = ConfigurationManager.AppSettings["EmotionApiKey"].ToString();
-    string imageUrl = ConfigurationManager.AppSettings["StorageURL"].ToString() +"/"+ ConfigurationManager.AppSettings["StorageContainer"].ToString() + "/" + fd.deviceId + "/" + fd.blobName;
-    log.Info(imageUrl);
+    //EmotionServiceHelper.ApiKey = ConfigurationManager.AppSettings["EmotionApiKey"].ToString();
+    //string imageUrl = ConfigurationManager.AppSettings["StorageURL"].ToString() +"/"+ ConfigurationManager.AppSettings["StorageContainer"].ToString() + "/" + fd.deviceId + "/" + fd.blobName;
+    //log.Info(imageUrl);
     ////StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["ContainerName"].ToString());
 
     //try
@@ -85,7 +86,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
     //    log.Info(e.Message);
     //}
 
-    
+
 
 }
 
