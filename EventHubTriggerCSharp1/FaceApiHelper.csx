@@ -63,6 +63,7 @@ public class FaceServiceHelper
         {
             try
             {
+                log.Info("face id" + faceId.ToString());
                 SimilarPersistedFace similarFace = (await FindSimilarAsync(faceId, faceListId))?.FirstOrDefault();
                 if (similarFace == null)
                 {
@@ -84,11 +85,11 @@ public class FaceServiceHelper
                     bestMatch = new Tuple<SimilarPersistedFace, string>(similarFace, faceListId);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 // Catch errors with individual face lists so we can continue looping through all lists. Maybe an answer will come from
                 // another one.
-                log.Info("Face API FindSimilarAsync error " + e.Message.ToString());
+                log.Info("Face API FindSimilarAsync error " + ex.Message.ToString() + ex.InnerException.ToString());
             }
         }
         return bestMatch;
