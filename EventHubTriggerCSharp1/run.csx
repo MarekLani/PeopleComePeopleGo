@@ -47,6 +47,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
             if (fd.entryCamera)
             {
                 log.Info("Entry Camera");
+                
                 var similarFace = await FaceServiceHelper.FindBestMatch(f.FaceId);
                 if (similarFace == null)
                 {
@@ -90,7 +91,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
         }
             catch (Exception e)
     {
-        log.Info(e.Message);
+        log.Info(e.Message + "stack" + e.StackTrace);
     }
 
     StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["StorageContainer"].ToString());
