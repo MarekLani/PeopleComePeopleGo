@@ -49,7 +49,7 @@ public class FaceServiceHelper
     }
 
     public static async Task<Tuple<SimilarPersistedFace, string>> FindBestMatch(Guid faceId)
-    { faceLists = new Dictionary<string, FaceListInfo>();
+    { 
 
         if (faceLists == null)
         {
