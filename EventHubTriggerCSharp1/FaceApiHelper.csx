@@ -36,6 +36,7 @@ public class FaceServiceHelper
         try
         {
             IEnumerable<FaceListMetadata> metadata = await GetFaceListsAsync();
+            log.Info("Nuber of lists after getFaceLists" + metadata.Count().ToString());
             foreach (var item in metadata)
             {
                 faceLists.Add(item.FaceListId, new FaceListInfo { FaceListId = item.FaceListId, LastMatchTimestamp = DateTime.Now });
