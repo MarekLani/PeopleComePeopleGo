@@ -53,7 +53,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
                     log.Info("No Similar Face");
                     // Detect emotion if not already in face list and send to event hub
                     var emotion = EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new Rectangle[] { new Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } });
-                    log.Info(emotion.Scores.Neutral.ToString());
+                    log.Info(emotion[0].Scores.Neutral.ToString());
                     //Solve creation of face lists
                     var persistedFace = await FaceServiceHelper.AddPersonToListAndCreateListIfNeeded(imageUrl, f.FaceRectangle);
                     //We need to send just similarPersistedFaceID (it is GUID)
@@ -61,7 +61,7 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
                 }
                 else
                 {
-                    log.Info("Similar Face" + similarFace.PersistedFaceId.ToString());
+                    log.Info("Similar Face" + similarFace.Item1.PersistedFaceId.ToString());
 
                 }
             }
