@@ -74,6 +74,8 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
         }
         //var r = insertKeyValuePair();
     }
+    else
+        { log.Info("f is null"); }
     }
     catch (Exception e)
     {
