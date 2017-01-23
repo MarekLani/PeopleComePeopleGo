@@ -30,7 +30,14 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
     string imageUrl = ConfigurationManager.AppSettings["StorageURL"].ToString() +"/"+ ConfigurationManager.AppSettings["StorageContainer"].ToString() + "/" + fd.deviceId + "/" + fd.blobName;
     log.Info(imageUrl);
 
-    Face f = (await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose })).ToList()?.FirstOrDefault();
+    try
+    {
+        Face f = (await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose })).ToList()?.FirstOrDefault();
+    }
+    catch(Exception e)
+    {
+        log.Info(e.Message);
+    }
     if (f != null)
     {
 
