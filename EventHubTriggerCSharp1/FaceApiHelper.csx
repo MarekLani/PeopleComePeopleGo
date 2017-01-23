@@ -63,7 +63,7 @@ public class FaceServiceHelper
         {
             try
             {
-                log.Info("face id" + faceId.ToString());
+                log.Info("face id" + faceListId.ToString());
                 SimilarPersistedFace similarFace = (await FindSimilarAsync(faceId, faceListId))?.FirstOrDefault();
                 if (similarFace == null)
                 {
