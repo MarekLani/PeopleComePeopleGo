@@ -100,6 +100,7 @@ public class FaceServiceHelper
         // might create a new list if none exist, and if all lists are full we will delete the oldest face list (based on when we  
         // last matched anything on it) so that we can add the new one.
 
+        log.Info("Adding person lists count:"+faceLists.Count().ToString());
         if (!faceLists.Any())
         {
             // We don't have any FaceLists yet. Create one
