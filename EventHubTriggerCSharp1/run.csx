@@ -19,16 +19,16 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
 {
     log.Info($"C# Event Hub trigger function processing a message: {myEventHubMessage}");
 
-    //FaceServiceHelper.log = log;
-    //EmotionServiceHelper.log = log;
+    FaceServiceHelper.log = log;
+    EmotionServiceHelper.log = log;
 
-    //var fd = JsonConvert.DeserializeObject<FaceData>(myEventHubMessage);
-    //FaceServiceHelper.ApiKey = ConfigurationManager.AppSettings["FaceApiKey"].ToString();
+    var fd = JsonConvert.DeserializeObject<FaceData>(myEventHubMessage);
+    FaceServiceHelper.ApiKey = ConfigurationManager.AppSettings["FaceApiKey"].ToString();
 
     ////TODO create emotion api and add setting
-    //EmotionServiceHelper.ApiKey = ConfigurationManager.AppSettings["EmotionApiKey"].ToString();
-    //string imageUrl = ConfigurationManager.AppSettings["StorageURL"].ToString() +"/"+ ConfigurationManager.AppSettings["StorageContainer"].ToString() + "/" + fd.deviceId + "/" + fd.blobName;
-    //log.Info(imageUrl);
+    EmotionServiceHelper.ApiKey = ConfigurationManager.AppSettings["EmotionApiKey"].ToString();
+    string imageUrl = ConfigurationManager.AppSettings["StorageURL"].ToString() +"/"+ ConfigurationManager.AppSettings["StorageContainer"].ToString() + "/" + fd.deviceId + "/" + fd.blobName;
+    log.Info(imageUrl);
     ////StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["ContainerName"].ToString());
 
     //try
