@@ -32,8 +32,10 @@ public static async void Run(string myEventHubMessage, TraceWriter log)
 
     try
     {
-        Face f = (await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose })).ToList()?.FirstOrDefault();
-    
+        var faces = (await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose }));
+        Face f = null;
+        if (faces.Any())
+            f = faces[0];
     if (f != null)
     {
 
