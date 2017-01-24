@@ -72,8 +72,8 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
     }
     catch (Exception e)
     {
-        if (e.GetType() == typeof(FaceApiException))
-            log.Info(((FaceApiException)e).ErrorMessage);
+        if (e.GetType() == typeof(FaceAPIException))
+            log.Info(((FaceAPIException)e).ErrorMessage);
         else
         {
             log.Info(e.Message + "stack" + e.StackTrace);
