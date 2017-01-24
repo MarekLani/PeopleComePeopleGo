@@ -65,10 +65,10 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
 
             //            //Discuss what should happen, when we want to send info also about person that was not caught during entering
             //            //Possible solution Add to be deleted queue and function which will go thru this queue every minute or so, and will be deleting these faces
+            
+            return emotion[0].Scores.Neutral.ToString() + "Face" + "  :" + fd.entryCamera.ToString() + f.FaceId.ToString() + " ))(" + f.FaceAttributes.Age.ToString();
         }
 
-        StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["StorageContainer"].ToString());
-        return emotion[0].Scores.Neutral.ToString() + "Face" + "  :" + fd.entryCamera.ToString() + f.FaceId.ToString() + " ))(" + f.FaceAttributes.Age.ToString();
     }
     catch (Exception e)
     {
@@ -77,8 +77,9 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
     finally
     {
         StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["StorageContainer"].ToString());
-        return "Error";
     }
+
+    return "Error";
 
 }
 
