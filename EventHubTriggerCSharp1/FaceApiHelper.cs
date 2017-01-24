@@ -109,7 +109,7 @@ public class FaceServiceHelper
         {
             // We don't have any FaceLists yet. Create one
             string newFaceListId = Guid.NewGuid().ToString();
-            await FaceServiceHelper.CreateFaceListAsync(newFaceListId, "ManagedFaceList");
+            await CreateFaceListAsync(newFaceListId, "ManagedFaceList");
 
             faceLists.Add(newFaceListId, new FaceListInfo { FaceListId = newFaceListId, LastMatchTimestamp = DateTime.Now });
         }
@@ -125,7 +125,7 @@ public class FaceServiceHelper
 
             try
             {
-                addResult = await FaceServiceHelper.AddFaceToFaceListAsync(faceList.Key, imageUri, faceRectangle);
+                addResult = await AddFaceToFaceListAsync(faceList.Key, imageUri, faceRectangle);
                 break;
             }
             catch (Exception ex)
@@ -156,7 +156,7 @@ public class FaceServiceHelper
                 // delete oldest face list
                 var oldestFaceList = faceLists.OrderBy(fl => fl.Value.LastMatchTimestamp).FirstOrDefault();
                 faceLists.Remove(oldestFaceList.Key);
-                await FaceServiceHelper.DeleteFaceListAsync(oldestFaceList.Key);
+                await DeleteFaceListAsync(oldestFaceList.Key);
             }
 
             // create new list
