@@ -20,12 +20,13 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
     log.Info($"C# Event Hub trigger function processing a message: {myEventHubMessage}");
 
     FaceServiceHelper.log = log;
-    FaceServiceHelper fsh = new FaceServiceHelper();
-    EmotionServiceHelper.log = log;
     FaceServiceHelper.ApiKey = ConfigurationManager.AppSettings["FaceApiKey"].ToString();
 
     ////TODO create emotion api and add setting
     EmotionServiceHelper.ApiKey = ConfigurationManager.AppSettings["EmotionApiKey"].ToString();
+    FaceServiceHelper fsh = new FaceServiceHelper();
+    EmotionServiceHelper.log = log;
+
 
     var fd = JsonConvert.DeserializeObject<FaceData>(myEventHubMessage);
     log.Info(fd.ToString());

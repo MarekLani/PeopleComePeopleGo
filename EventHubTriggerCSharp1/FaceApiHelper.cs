@@ -189,16 +189,11 @@ public class FaceServiceHelper
         get { return apiKey; }
         set
         {
-            var changed = apiKey != value;
             apiKey = value;
-            if (changed)
-            {
-                InitializeFaceServiceClient();
-            }
         }
     }
 
-    static FaceServiceHelper()
+    FaceServiceHelper()
     {
         InitializeFaceServiceClient();
     }
