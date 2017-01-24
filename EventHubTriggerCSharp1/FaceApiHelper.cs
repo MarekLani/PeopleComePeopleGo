@@ -193,7 +193,7 @@ public class FaceServiceHelper
         }
     }
 
-    FaceServiceHelper()
+    public FaceServiceHelper()
     {
         InitializeFaceServiceClient();
     }
