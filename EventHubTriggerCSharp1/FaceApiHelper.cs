@@ -56,7 +56,7 @@ public class FaceServiceHelper
         }
 
         Tuple<SimilarPersistedFace, string> bestMatch = null;
-        bool foundMatch = false;
+ 
         foreach (var faceListId in faceLists.Keys)
         {
             try
@@ -66,25 +66,21 @@ public class FaceServiceHelper
                 {
                     similarFace = (await FindSimilarAsync(faceId, faceListId))?.FirstOrDefault();
                 }
-                catch (Exception e) { }
-                if (similarFace == null)
+                catch (Exception e) { log.Info("Face API Find Similar error: " + e.Message); }
+                if (similarFace != null)
                 {
-                    log.Info("Face API Find Similar error: " + e.Message);
-                }
-
-                foundMatch = true;
-
-                if (bestMatch != null)
-                {
-                    // We already found a match for this face in another list. Replace the previous one if the new confidence is higher.
-                    if (bestMatch.Item1.Confidence < similarFace.Confidence)
+                    if (bestMatch != null)
+                    {
+                        // We already found a match for this face in another list. Replace the previous one if the new confidence is higher.
+                        if (bestMatch.Item1.Confidence < similarFace.Confidence)
+                        {
+                            bestMatch = new Tuple<SimilarPersistedFace, string>(similarFace, faceListId);
+                        }
+                    }
+                    else
                     {
                         bestMatch = new Tuple<SimilarPersistedFace, string>(similarFace, faceListId);
                     }
-                }
-                else
-                {
-                    bestMatch = new Tuple<SimilarPersistedFace, string>(similarFace, faceListId);
                 }
             }
             catch (Exception ex)
