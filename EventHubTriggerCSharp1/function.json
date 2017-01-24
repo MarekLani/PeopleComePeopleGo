@@ -6,6 +6,13 @@
       "direction": "in",
       "path": "bluedynamicshub",
       "connection": "BlueDynamic"
+    },
+    {
+      "type": "eventHub",
+      "name": "$return",
+      "path": "bluedynamicoutput",
+      "connection": "BlueDynamic",
+      "direction": "out"
     }
   ],
   "disabled": false

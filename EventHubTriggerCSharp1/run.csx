@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using System.Configuration;
 using Microsoft.ProjectOxford.Common;
 
-public static async void Run(string myEventHubMessage, out string outputEventHubMessage, TraceWriter log)
+public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
 {
     log.Info($"C# Event Hub trigger function processing a message: {myEventHubMessage}");
 
@@ -65,15 +65,20 @@ public static async void Run(string myEventHubMessage, out string outputEventHub
 
             //            //Discuss what should happen, when we want to send info also about person that was not caught during entering
             //            //Possible solution Add to be deleted queue and function which will go thru this queue every minute or so, and will be deleting these faces
-            outputEventHubMessage = emotion[0].Scores.Neutral.ToString() + "Face" + "  :" + fd.entryCamera.ToString() + f.FaceId.ToString() + " ))(" + f.FaceAttributes.Age.ToString();
         }
+
+        StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["StorageContainer"].ToString());
+        return emotion[0].Scores.Neutral.ToString() + "Face" + "  :" + fd.entryCamera.ToString() + f.FaceId.ToString() + " ))(" + f.FaceAttributes.Age.ToString();
     }
     catch (Exception e)
     {
         log.Info(e.Message + "stack" + e.StackTrace);
     }
-
-    StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["StorageContainer"].ToString());
+    finally
+    {
+        StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["StorageContainer"].ToString());
+        return "Error";
+    }
 
 }
 
