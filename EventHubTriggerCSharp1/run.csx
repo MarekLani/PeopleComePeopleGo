@@ -72,7 +72,12 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
     }
     catch (Exception e)
     {
-        log.Info(e.Message + "stack" + e.StackTrace);
+        if (e.GetType() == typeof(FaceApiException))
+            log.Info(((FaceApiException)e).ErrorMessage);
+        else
+        {
+            log.Info(e.Message + "stack" + e.StackTrace);
+        }
     }
     finally
     {

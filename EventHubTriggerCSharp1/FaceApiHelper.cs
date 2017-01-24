@@ -66,7 +66,12 @@ public class FaceServiceHelper
                 {
                     similarFace = (await FindSimilarAsync(faceId, faceListId))?.FirstOrDefault();
                 }
-                catch (Exception e) { log.Info("Face API Find Similar error: " + e.Message); }
+                catch (Exception e) {
+                    if (e.GetType() == typeof(FaceApiException))
+                        log.Info(((FaceApiException)e).ErrorMessage);
+                    else
+                        log.Info("Face API Find Similar error: " + e.Message);
+                }
                 if (similarFace != null)
                 {
                     if (bestMatch != null)
