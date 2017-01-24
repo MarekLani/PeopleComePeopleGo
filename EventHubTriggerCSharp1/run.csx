@@ -20,21 +20,23 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
     log.Info($"C# Event Hub trigger function processing a message: {myEventHubMessage}");
 
     FaceServiceHelper.log = log;
+    FaceServiceHelper fsh = new FaceServiceHelper();
     EmotionServiceHelper.log = log;
-
-    var fd = JsonConvert.DeserializeObject<FaceData>(myEventHubMessage);
-    log.Info(fd.ToString());
     FaceServiceHelper.ApiKey = ConfigurationManager.AppSettings["FaceApiKey"].ToString();
 
     ////TODO create emotion api and add setting
     EmotionServiceHelper.ApiKey = ConfigurationManager.AppSettings["EmotionApiKey"].ToString();
+
+    var fd = JsonConvert.DeserializeObject<FaceData>(myEventHubMessage);
+    log.Info(fd.ToString());
+   
     string imageUrl = ConfigurationManager.AppSettings["StorageURL"].ToString() + "/" + ConfigurationManager.AppSettings["StorageContainer"].ToString() + "/" + fd.deviceId + "/" + fd.blobName;
     log.Info(imageUrl);
 
 
     try
     {
-        var f = (await FaceServiceHelper.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose }))?.ToList().FirstOrDefault();
+        var f = (await fsh.DetectAsync(imageUrl, true, true, new FaceAttributeType[] { FaceAttributeType.Age, FaceAttributeType.FacialHair, FaceAttributeType.Glasses, FaceAttributeType.Smile, FaceAttributeType.Gender, FaceAttributeType.HeadPose }))?.ToList().FirstOrDefault();
 
         if (f != null)
         {
@@ -44,12 +46,12 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
 
             string personId = "";
 
-            var similarFace = await FaceServiceHelper.FindBestMatch(f.FaceId);
+            var similarFace = await fsh.FindBestMatch(f.FaceId);
             if (similarFace == null)
             {
                 log.Info("No Similar Face found");
                 //Solve creation of face lists
-                var persistedFace = await FaceServiceHelper.AddPersonToListAndCreateListIfNeeded(imageUrl, f.FaceRectangle);
+                var persistedFace = await fsh.AddPersonToListAndCreateListIfNeeded(imageUrl, f.FaceRectangle);
                 //We need to send just similarPersistedFaceID (it is GUID)
                 personId = persistedFace.PersistedFaceId.ToString();
             }

@@ -19,7 +19,7 @@ public class FaceData
 
 public class FaceServiceHelper
 {
-    public static Dictionary<string, FaceListInfo> faceLists;
+    public Dictionary<string, FaceListInfo> faceLists;
 
     public static TraceWriter log;
 
@@ -30,7 +30,7 @@ public class FaceServiceHelper
         public bool IsFull { get; set; }
     }
 
-    public static async Task InitializeFaceLists()
+    public  async Task InitializeFaceLists()
     {
         faceLists = new Dictionary<string, FaceListInfo>();
         try
@@ -47,7 +47,7 @@ public class FaceServiceHelper
         }
     }
 
-    public static async Task<Tuple<SimilarPersistedFace, string>> FindBestMatch(Guid faceId)
+    public async Task<Tuple<SimilarPersistedFace, string>> FindBestMatch(Guid faceId)
     { 
 
         if (faceLists == null)
@@ -98,7 +98,7 @@ public class FaceServiceHelper
         return bestMatch;
     }
 
-    public static async Task<SimilarPersistedFace> AddPersonToListAndCreateListIfNeeded(string imageUri, FaceRectangle faceRectangle)
+    public async Task<SimilarPersistedFace> AddPersonToListAndCreateListIfNeeded(string imageUri, FaceRectangle faceRectangle)
     {
 
         // If we are here we didnt' find a match, so let's add the face to the first FaceList that we can add it to. We
@@ -179,9 +179,9 @@ public class FaceServiceHelper
     public static int RetryCountOnQuotaLimitError = 8;
     public static int RetryDelayOnQuotaLimitError = 1000;
 
-    private static FaceServiceClient faceClient { get; set; }
+    private  FaceServiceClient faceClient { get; set; }
 
-    public static Action Throttled;
+    public  Action Throttled;
 
     private static string apiKey;
     public static string ApiKey
@@ -203,13 +203,13 @@ public class FaceServiceHelper
         InitializeFaceServiceClient();
     }
 
-    private static void InitializeFaceServiceClient()
+    private  void InitializeFaceServiceClient()
     {
         faceClient = new FaceServiceClient(apiKey);
     }
 
 
-    private static async Task<TResponse> RunTaskWithAutoRetryOnQuotaLimitExceededError<TResponse>(Func<Task<TResponse>> action)
+    private  async Task<TResponse> RunTaskWithAutoRetryOnQuotaLimitExceededError<TResponse>(Func<Task<TResponse>> action)
     {
         int retriesLeft = FaceServiceHelper.RetryCountOnQuotaLimitError;
         int delay = FaceServiceHelper.RetryDelayOnQuotaLimitError;
@@ -240,47 +240,47 @@ public class FaceServiceHelper
         return response;
     }
 
-    private static async Task RunTaskWithAutoRetryOnQuotaLimitExceededError(Func<Task> action)
+    private  async Task RunTaskWithAutoRetryOnQuotaLimitExceededError(Func<Task> action)
     {
         await RunTaskWithAutoRetryOnQuotaLimitExceededError<object>(async () => { await action(); return null; });
     }
 
 
-    public static async Task<Face[]> DetectAsync(string url, bool returnFaceId = true, bool returnFaceLandmarks = false, IEnumerable<FaceAttributeType> returnFaceAttributes = null)
+    public  async Task<Face[]> DetectAsync(string url, bool returnFaceId = true, bool returnFaceLandmarks = false, IEnumerable<FaceAttributeType> returnFaceAttributes = null)
     {
         return await RunTaskWithAutoRetryOnQuotaLimitExceededError<Face[]>(() => faceClient.DetectAsync(url, returnFaceId, returnFaceLandmarks, returnFaceAttributes));
     }
 
-    public static async Task<AddPersistedFaceResult> AddFaceToFaceListAsync(string faceListId, string imageUri, FaceRectangle targetFace)
+    public  async Task<AddPersistedFaceResult> AddFaceToFaceListAsync(string faceListId, string imageUri, FaceRectangle targetFace)
     {
         return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<AddPersistedFaceResult>(() => faceClient.AddFaceToFaceListAsync(faceListId, imageUri, null, targetFace)));
     }
 
-    public static async Task<IEnumerable<FaceListMetadata>> GetFaceListsAsync(string userDataFilter = null)
+    public  async Task<IEnumerable<FaceListMetadata>> GetFaceListsAsync(string userDataFilter = null)
     {
         return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<FaceListMetadata[]>(() => faceClient.ListFaceListsAsync())).Where(list => string.IsNullOrEmpty(userDataFilter) || string.Equals(list.UserData, userDataFilter));
     }
 
-    public static async Task<SimilarPersistedFace[]> FindSimilarAsync(Guid faceId, string faceListId, int maxNumOfCandidatesReturned = 1)
+    public  async Task<SimilarPersistedFace[]> FindSimilarAsync(Guid faceId, string faceListId, int maxNumOfCandidatesReturned = 1)
     {
         return (await RunTaskWithAutoRetryOnQuotaLimitExceededError<SimilarPersistedFace[]>(() => faceClient.FindSimilarAsync(faceId, faceListId, maxNumOfCandidatesReturned)));
     }
 
-    public static async Task CreateFaceListAsync(string faceListId, string name, string userData)
+    public  async Task CreateFaceListAsync(string faceListId, string name, string userData)
     {
         await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.CreateFaceListAsync(faceListId, name, userData));
     }
-    public static async Task CreateFaceListAsync(string faceListId, string name)
+    public  async Task CreateFaceListAsync(string faceListId, string name)
     {
         await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.CreateFaceListAsync(faceListId, name, ""));
     }
 
-    public static async Task DeleteFaceListAsync(string faceListId)
+    public  async Task DeleteFaceListAsync(string faceListId)
     {
         await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeleteFaceListAsync(faceListId));
     }
 
-    public static async Task DeleteFaceFromFaceListAsync(string faceListId, Guid peristedFaceId)
+    public  async Task DeleteFaceFromFaceListAsync(string faceListId, Guid peristedFaceId)
     {
         await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.DeleteFaceFromFaceListAsync(faceListId, peristedFaceId));
     }
