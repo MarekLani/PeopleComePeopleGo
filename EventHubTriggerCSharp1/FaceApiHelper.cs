@@ -176,8 +176,8 @@ public class FaceServiceHelper
             return null;
     }
 
-    public static int RetryCountOnQuotaLimitError = 6;
-    public static int RetryDelayOnQuotaLimitError = 500;
+    public static int RetryCountOnQuotaLimitError = 8;
+    public static int RetryDelayOnQuotaLimitError = 1000;
 
     private static FaceServiceClient faceClient { get; set; }
 
