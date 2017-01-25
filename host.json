@@ -1,3 +1,9 @@
 {
-    "watchDirectories": [ "Shared" ]
+  "watchDirectories": [ "Shared" ],
+  "eventHub": {
+    // The maximum event count received per receive loop. The default is 64.
+    "maxBatchSize": 20,
+    // The default PrefetchCount that will be used by the underlying EventProcessorHost.
+    "prefetchCount": 128
+  }
 }

@@ -9,14 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.ProjectOxford.Common;
 
-public class FaceData
-{
-    public string deviceId { get; set; }
-    public string blobName { get; set; }
-    public string cameraId { get; set; }
-    public bool entryCamera { get; set; }
-}
-
 public class FaceServiceHelper
 {
     public Dictionary<string, FaceListInfo> faceLists;
@@ -176,8 +168,8 @@ public class FaceServiceHelper
             return null;
     }
 
-    public static int RetryCountOnQuotaLimitError = 8;
-    public static int RetryDelayOnQuotaLimitError = 1000;
+    public static int RetryCountOnQuotaLimitError = 7;
+    public static int RetryDelayOnQuotaLimitError = 700;
 
     private  FaceServiceClient faceClient { get; set; }
 
@@ -268,6 +260,23 @@ public class FaceServiceHelper
     public  async Task CreateFaceListAsync(string faceListId, string name)
     {
         await RunTaskWithAutoRetryOnQuotaLimitExceededError(() => faceClient.CreateFaceListAsync(faceListId, name, ""));
+    }
+
+    public async void DeleteAllFaceLists()
+    {
+        if (faceLists == null)
+        {
+            await InitializeFaceLists();
+        }
+
+        Tuple<SimilarPersistedFace, string> bestMatch = null;
+
+        foreach (var faceListId in faceLists.Keys)
+        {
+            await DeleteFaceListAsync(faceListId);
+        }
+
+        faceLists = null;
     }
 
     public  async Task DeleteFaceListAsync(string faceListId)

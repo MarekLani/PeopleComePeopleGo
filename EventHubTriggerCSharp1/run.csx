@@ -1,9 +1,11 @@
 #r "Newtonsoft.Json"
 #r "System.IO"
 #r "System.Net.Primitives"
-#load "FaceApiHelper.cs"
-#load "StorageHelper.cs"
+
+#load "../Shared/FaceApiHelper.cs"
+#load "../Shared/StorageHelper.cs"
 #load "redisManager.csx"
+#load "FaceDataObjects.cs"
 
 
 using System;
@@ -68,8 +70,8 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
 
             //            //Discuss what should happen, when we want to send info also about person that was not caught during entering
             //            //Possible solution Add to be deleted queue and function which will go thru this queue every minute or so, and will be deleting these faces
-            
-            return emotion[0].Scores.Neutral.ToString() + "Face" + "  :" + fd.entryCamera.ToString() + f.FaceId.ToString() + " ))(" + f.FaceAttributes.Age.ToString();
+            var returnMessage = JsonConvert.SerializeObject(CreateReturnMessage(f,e,personId,fd.timeStamp));
+            return returnMessage;
         }
 
     }
@@ -84,11 +86,44 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
     }
     finally
     {
-        StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.AppSettings["StorageContainer"].ToString());
+        StorageHelper.DeleteFile(fd.deviceId + "/" + fd.blobName, ConfigurationManager.ConnectionStrings["StorageConnectionString"].ToString(),ConfigurationManager.AppSettings["StorageContainer"].ToString());
     }
 
     return "Error";
+}
 
+public FaceSendInfo CreateReturnMessage(Face f, Emotion e, string faceId, DateTime timeStamp)
+{
+    var fsi = new FaceSendInfo();
+
+    fsi.faceId = faceId;
+
+    fsi.age = f.FaceAttributes.Age;
+    fsi.gender = f.FaceAttributes.Gender;
+    fsi.smile = f.FaceAttributes.Smile;
+
+    fsi.beard = f.FaceAttributes.FacialHair.Beard;
+    fsi.moustache = f.FaceAttributes.FacialHair.Moustache;
+    fsi.sideburns = f.FaceAttributes.FacialHair.Sideburns;
+
+    fsi.glasses = f.FaceAttributes.Glasses.ToString();
+
+    fsi.headYaw = f.FaceAttributes.HeadPose.Yaw;
+    fsi.headRoll = f.FaceAttributes.HeadPose.Roll;
+    fsi.headPitch = f.FaceAttributes.HeadPose.Pitch;
+
+    fsi.anger = e.Scores.Anger;
+    fsi.contempt = e.Scores.Contempt;
+    fsi.disgust = e.Scores.Disgust;
+    fsi.fear = e.Scores.Fear;
+    fsi.happiness = e.Scores.Happiness;
+    fsi.neutral = e.Scores.Neutral;
+    fsi.sadness = e.Scores.Sadness;
+    fsi.surprise = e.Scores.Surprise;
+
+    fsi.timeStamp = timeStamp;
+
+    return fsi;
 }
 
 
