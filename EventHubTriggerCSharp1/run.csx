@@ -70,7 +70,7 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
 
             //            //Discuss what should happen, when we want to send info also about person that was not caught during entering
             //            //Possible solution Add to be deleted queue and function which will go thru this queue every minute or so, and will be deleting these faces
-            var returnMessage = JsonConvert.SerializeObject(CreateReturnMessage(f,e,personId,fd.timeStamp));
+            var returnMessage = JsonConvert.SerializeObject(CreateReturnMessage(f,emotion,personId,fd.timeStamp));
             return returnMessage;
         }
 

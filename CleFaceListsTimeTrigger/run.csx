@@ -1,4 +1,7 @@
-﻿#load "../Shared/FaceApiHelper.cs"
+﻿#r "System.IO"
+#r "System.Net.Primitives"
+
+#load "../Shared/FaceApiHelper.cs"
 #load "../Shared/StorageHelper.cs"
 
 using System;
