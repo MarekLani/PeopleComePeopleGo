@@ -28,7 +28,11 @@ public class StorageHelper
 
         foreach(var blob in container.ListBlobs())
         {
-            ((CloudBlockBlob)blob).DeleteIfExists();
+            if(blob.GetType() == typeof(CloudBlockBlob))
+                ((CloudBlockBlob)blob).DeleteIfExists();
+
+            if (blob.GetType() == typeof(CloudBlockDirectory))
+                ((CloudBlockDirectory)blob).DeleteIfExists();
         }
     }
 
