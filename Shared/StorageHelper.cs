@@ -31,8 +31,8 @@ public class StorageHelper
             if(blob.GetType() == typeof(CloudBlockBlob))
                 ((CloudBlockBlob)blob).DeleteIfExists();
 
-            if (blob.GetType() == typeof(CloudBlockDirectory))
-                ((CloudBlockDirectory)blob).DeleteIfExists();
+            if (blob.GetType() == typeof(CloudBlobDirectory))
+                ((CloudBlobDirectory)blob).DeleteIfExists();
         }
     }
 
