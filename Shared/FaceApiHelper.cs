@@ -96,6 +96,10 @@ public class FaceServiceHelper
         // If we are here we didnt' find a match, so let's add the face to the first FaceList that we can add it to. We
         // might create a new list if none exist, and if all lists are full we will delete the oldest face list (based on when we  
         // last matched anything on it) so that we can add the new one.
+        if (faceLists == null)
+        {
+            await InitializeFaceLists();
+        }
 
         if (!faceLists.Any())
         {
@@ -165,7 +169,11 @@ public class FaceServiceHelper
             return new SimilarPersistedFace() { Confidence = 1, PersistedFaceId = addResult.PersistedFaceId };
         }
         else
+        {
+            log.Info("Returning null, added face not success")
             return null;
+        }
+
     }
 
     public static int RetryCountOnQuotaLimitError = 7;
