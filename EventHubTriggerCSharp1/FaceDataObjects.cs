@@ -20,6 +20,8 @@ public class FaceSendInfo
 {
         public string faceId { get; set; }
 
+    public bool entryCamera { get; set; }
+
         private double _age;
         public double age
         {
