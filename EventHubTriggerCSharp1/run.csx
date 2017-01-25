@@ -64,7 +64,7 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
             }
 
             // Detect emotion
-            var emotion = await EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new Rectangle[] { new Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } })?.ToList().FirstOrDefault();
+            var emotion = (await EmotionServiceHelper.RecognizeWithFaceRectanglesAsync(imageUrl, new Rectangle[] { new Rectangle() { Top = f.FaceRectangle.Top, Height = f.FaceRectangle.Height, Left = f.FaceRectangle.Left, Width = f.FaceRectangle.Width } }))?.ToList().FirstOrDefault();
 
             //            //Discuss what should happen, when we want to send info also about person that was not caught during entering
             //            //Possible solution Add to be deleted queue and function which will go thru this queue every minute or so, and will be deleting these faces
