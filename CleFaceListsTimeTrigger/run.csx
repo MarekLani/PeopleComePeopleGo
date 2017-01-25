@@ -11,7 +11,7 @@ using System.Configuration;
 using Microsoft.ProjectOxford.Common;
 
 
-public static void Run(TraceWriter log)
+public static void Run(TimerInfo myTimer,TraceWriter log)
 {
     FaceServiceHelper.ApiKey = ConfigurationManager.AppSettings["FaceApiKey"].ToString();
     var fsh = new FaceServiceHelper();
