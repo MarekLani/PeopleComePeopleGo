@@ -170,7 +170,7 @@ public class FaceServiceHelper
         }
         else
         {
-            log.Info("Returning null, added face not success")
+            log.Info("Returning null, added face not success");
             return null;
         }
 
