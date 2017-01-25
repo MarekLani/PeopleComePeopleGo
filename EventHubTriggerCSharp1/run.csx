@@ -91,7 +91,7 @@ public static async Task<string> Run(string myEventHubMessage, TraceWriter log)
     return "Error";
 }
 
-public FaceSendInfo CreateReturnMessage(Face f, Emotion e, string faceId, DateTime timeStamp)
+public static FaceSendInfo CreateReturnMessage(Face f, Emotion e, string faceId, DateTime timeStamp)
 {
     var fsi = new FaceSendInfo();
 

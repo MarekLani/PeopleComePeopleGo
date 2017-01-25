@@ -31,11 +31,12 @@ public class StorageHelper
             if(blob.GetType() == typeof(CloudBlockBlob))
                 ((CloudBlockBlob)blob).DeleteIfExists();
 
-            //if (blob.GetType() == typeof(CloudBlobDirectory)) {
-            //    foreach (var blob2 in ((CloudBlobDirectory)blob).ListBlobs())
-            //        if (blob2.GetType() == typeof(CloudBlockBlob))
-            //            ((CloudBlockBlob)blob2).DeleteIfExists();
-            //}
+            if (blob.GetType() == typeof(CloudBlobDirectory))
+            {
+                foreach (var blob2 in ((CloudBlobDirectory)blob).ListBlobs())
+                    if (blob2.GetType() == typeof(CloudBlockBlob))
+                        ((CloudBlockBlob)blob2).DeleteIfExists();
+            }
         }
     }
 
